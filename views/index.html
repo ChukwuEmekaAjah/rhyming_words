@@ -184,6 +184,12 @@
 					"results-container"
 				);
 				results_container.innerHTML = "";
+				if(Object.keys(response).length == 0){
+					let title = document.createElement("h3");
+					title.innerHTML = "We found no matching words";
+					title.className = "center";
+					results_container.appendChild(title);
+				}
 				for (let alphabet_list in response) {
 					let button = document.createElement("button");
 					button.className = "button button--square button--rounded";
@@ -228,7 +234,7 @@
 		const request_form = document.getElementById("request_form");
 		request_form.addEventListener("submit", event => {
 			event.preventDefault();
-			let characters = document.getElementById("characters").value;
+			let characters = document.getElementById("characters").value.toLowerCase();
 			let characters_position = document.getElementById(
 				"characters_position"
 			).value;
