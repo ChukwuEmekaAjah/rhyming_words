@@ -1,0 +1,84 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	width: 100%;
+	align-self: center;
+	margin: 0;
+}
+body {
+	padding: 0;
+	margin: 0;
+	font-family: "Roboto", sans-serif;
+}
+.row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+.column {
+	display: flex;
+	flex-direction: column;
+	margin: 20px;
+}
+.input,
+.button {
+	height: 50px !important;
+	width: 300px;
+	background: white;
+	outline: none;
+	border: none;
+	color: black;
+	z-index: 1;
+	box-shadow: 1.5px 2px 6px #333;
+	padding: 5px 10px;
+	border-radius: 5px;
+	box-sizing: border-box;
+}
+.input:hover {
+	box-shadow: 3px 4px 12px #333;
+}
+.button {
+	width: auto;
+	padding: 5px 10px;
+}
+.button--square {
+	width: 50px;
+	height: 50px;
+}
+.button--rounded {
+	border-radius: 50%;
+}
+label {
+	margin-bottom: 10px;
+}
+h2 {
+	margin-bottom: 0px;
+}
+.results-container {
+	padding-top: 50px;
+	width: 60%;
+}
+@media screen and (max-width: 576px) {
+	.results-container {
+		width: 100%;
+	}
+}
+.results-container .button {
+	margin: 5px 10px;
+	cursor: pointer;
+}
+.results-view {
+	height: 300px;
+	overflow-y: scroll;
+	max-width: 300px;
+	box-shadow: 1.5px 2px 6px #333;
+	padding: 10px 5px;
+	border: 1px solid white;
+	border-radius: 5px;
+	margin-top: 20px;
+	display: none;
+}

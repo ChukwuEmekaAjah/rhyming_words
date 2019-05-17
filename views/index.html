@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Word rhymes memory</title>
+		<link
+			href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<style type="text/css">
+			.container {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				min-height: 100vh;
+				width: 100%;
+				align-self: center;
+				margin: 0;
+			}
+			body {
+				padding: 0;
+				margin: 0;
+				font-family: "Roboto", sans-serif;
+			}
+			.row {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+			}
+			.column {
+				display: flex;
+				flex-direction: column;
+				margin: 20px;
+			}
+			.input,
+			.button {
+				height: 50px !important;
+				width: 300px;
+				background: white;
+				outline: none;
+				border: none;
+				color: black;
+				z-index: 1;
+				box-shadow: 1.5px 2px 6px #333;
+				padding: 5px 10px;
+				border-radius: 5px;
+				box-sizing: border-box;
+			}
+			.input:hover {
+				box-shadow: 3px 4px 12px #333;
+			}
+			.button {
+				width: auto;
+				padding: 5px 10px;
+			}
+			.button--square {
+				width: 50px;
+				height: 50px;
+			}
+			.button--rounded {
+				border-radius: 50%;
+			}
+			label {
+				margin-bottom: 10px;
+			}
+			h2 {
+				margin-bottom: 0px;
+			}
+			.results-container {
+				padding-top: 50px;
+				width: 60%;
+			}
+			@media screen and (max-width: 576px) {
+				.results-container {
+					width: 100%;
+				}
+			}
+			.results-container .button {
+				margin: 5px 10px;
+				cursor: pointer;
+			}
+			.results-view {
+				height: 300px;
+				overflow-y: scroll;
+				max-width: 300px;
+				box-shadow: 1.5px 2px 6px #333;
+				padding: 10px 5px;
+				border: 1px solid white;
+				border-radius: 5px;
+				margin-top: 20px;
+				display: none;
+			}
+		</style>
+		<section>
+			<div class="container">
+				<h2>
+					Ever been in a dilemma of looking for rhyming words for your
+					next poem?
+				</h2>
+				<h5>
+					Look no farther. Word rhymes memory was built just for your
+					use case
+				</h5>
+				<form method="post" id="request_form" action="/">
+					<div class="row">
+						<div class="column">
+							<label for="characters">
+								Intended character pattern
+							</label>
+							<input
+								class="input"
+								name="characters"
+								type="text"
+								id="characters"
+								placeholder="type your intended character pattern"
+							/>
+						</div>
+						<div class="column">
+							<label for="characters_position">
+								Select the character pattern position
+							</label>
+							<select
+								class="input"
+								name="characters_position"
+								id="characters_position"
+							>
+								<option value="starting"> starting </option>
+								<option value="ending"> ending </option>
+								<option value="in"> in-between </option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<button class="button">Get words</button>
+					</div>
+				</form>
+				<div class="row">
+					<div class="results-container" id="results-container"></div>
+				</div>
+				<div class="row">
+					<div class="results-view" id="results-view"></div>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script type="text/javascript">
+		function make_request(path, data, method) {
+			let xhr = new XMLHttpRequest();
+
+			xhr.open(method, path);
+
+			xhr.send(data);
+
+			xhr.onload = function() {
+				if (xhr.status != 200) {
+					// HTTP error?
+					// handle error
+					alert(
+						`Error: ${xhr.status} - ${
+							xhr.statusText
+						}. Please try again.`
+					);
+					return;
+				}
+				let response = JSON.parse(xhr.responseText);
+				console.log(response);
+				const results_container = document.getElementById(
+					"results-container"
+				);
+				results_container.innerHTML = "";
+				for (let alphabet_list in response) {
+					let button = document.createElement("button");
+					button.className = "button button--square button--rounded";
+					button.innerHTML = alphabet_list.toUpperCase();
+					button.dataset.alphabet = alphabet_list;
+					results_container.appendChild(button);
+					button.addEventListener("click", e => {
+						let results_view = document.getElementById(
+							"results-view"
+						);
+						results_view.innerHTML = "";
+						results_view.style.display = "block";
+						let unordered_list = document.createElement("ul");
+						results_view.appendChild(unordered_list);
+						for (
+							let i = 0;
+							i < response[e.target.dataset.alphabet].length;
+							i++
+						) {
+							let list_item = document.createElement("li");
+							list_item.innerHTML =
+								response[e.target.dataset.alphabet][i];
+							unordered_list.appendChild(list_item);
+						}
+					});
+				}
+			};
+
+			xhr.onerror = function() {
+				alert("There was an error in processing your request.");
+			};
+		}
+		const request_form = document.getElementById("request_form");
+		request_form.addEventListener("submit", event => {
+			event.preventDefault();
+			let characters = document.getElementById("characters").value;
+			let characters_position = document.getElementById(
+				"characters_position"
+			).value;
+			if (!characters || !characters_position) {
+				alert("Please type in your characters pattern");
+				return;
+			}
+			let form_data = `characters=${characters}&characters_position=${characters_position}`;
+			make_request("/", form_data, "POST", true);
+		});
+	</script>
+</html>
