@@ -7,6 +7,19 @@
 			href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
 			rel="stylesheet"
 		/>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=UA-140480326-1"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+			gtag("config", "UA-140480326-1");
+		</script>
 	</head>
 	<body>
 		<style type="text/css">
@@ -191,7 +204,14 @@
 					let title = document.createElement("h3");
 					title.innerHTML = "We found no matching words";
 					title.className = "center";
+
 					results_container.appendChild(title);
+					let results_view = document.getElementById(
+							"results-view"
+						);
+					if(results_view.style.display == 'block'){
+						results_view.style.display = 'none';
+					}
 				}
 				for (let alphabet_list in response) {
 					let button = document.createElement("button");
