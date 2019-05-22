@@ -1,10 +1,7 @@
 const fs = require("fs");
 
 function read_file(filename) {
-	return fs
-		.readFileSync(filename)
-		.toString()
-		.split(/\n\r?|\n\t?|\r/);
+	return fs.readFileSync(filename).toString();
 }
 
 function arrange_words_by_alphabet(words) {
@@ -63,8 +60,10 @@ function get_matching_words(characters_position, characters, matching_regex) {
 		return matching_words;
 	}
 }
-const words = read_file("./data/words.txt");
-const arranged_words_by_alphabet = arrange_words_by_alphabet(words);
+
+const words = read_file("./data/parsed_words.json");
+const arranged_words_by_alphabet = JSON.parse(words);
+
 exports.get_words = (characters_position, characters) => {
 	const matching_regex = create_regex(characters_position, characters);
 	let matching_words = get_matching_words(
